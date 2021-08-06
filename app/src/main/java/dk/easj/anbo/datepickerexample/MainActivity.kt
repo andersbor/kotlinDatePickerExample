@@ -60,13 +60,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.showTimesButton.setOnClickListener {
-            val timeInSeconds = convertCalendarToTimeInSeconds(meetingStart)
             val dateFormatter = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.LONG)
             val date = meetingStart.time
             val dateTimeString = dateFormatter.format(date)
             binding.timeTextView.text = dateTimeString
+
             binding.unixTimeMiliSecondsTextView.text =
                 "Unit time in miliseconds: ${meetingStart.timeInMillis}"
+
+            val timeInSeconds = convertCalendarToTimeInSeconds(meetingStart)
             binding.unixTimeSecondsTextView.text = "Unix time in seconds: $timeInSeconds"
         }
     }
