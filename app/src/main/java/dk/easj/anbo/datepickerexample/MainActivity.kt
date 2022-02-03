@@ -5,11 +5,19 @@ import android.app.DatePickerDialog.OnDateSetListener
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.icu.util.Calendar
+import android.icu.util.TimeZone
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import com.google.android.material.timepicker.TimeFormat
 import dk.easj.anbo.datepickerexample.databinding.ActivityMainBinding
 import java.text.DateFormat
+import java.time.Clock
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -22,6 +30,18 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view: View = binding.root
         setContentView(view)
+
+        val currentMoment: Long = Clock.system(ZoneId.of("Europe/Copenhagen")).millis()
+        val t: Long = System.currentTimeMillis()
+        Log.d("APPLE", "currentMoment unit time $currentMoment")
+        Log.d("APPLE", "currentMoment unit time $t")
+
+        val dateFormatter = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE)
+        val timeFormatter = DateFormat.getTimeInstance() // using device locale
+        val dateString = dateFormatter.format(currentMoment)
+        val timeString = timeFormatter.format(currentMoment)
+        Log.d("APPLE", "currentMoment $dateString $timeString")
+
 
         binding.dateButton.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -66,7 +86,7 @@ class MainActivity : AppCompatActivity() {
             binding.timeTextView.text = dateTimeString
 
             binding.unixTimeMiliSecondsTextView.text =
-                "Unit time in miliseconds: ${meetingStart.timeInMillis}"
+                "Unit time in milliseconds: ${meetingStart.timeInMillis}"
 
             val timeInSeconds = convertCalendarToTimeInSeconds(meetingStart)
             binding.unixTimeSecondsTextView.text = "Unix time in seconds: $timeInSeconds"
@@ -74,7 +94,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun convertCalendarToTimeInSeconds(calendar: Calendar): Int {
-        val timeInMillis = calendar.timeInMillis
+        val timeInMillis: Long = calendar.timeInMillis
         return (timeInMillis / 1000).toInt()
     }
 }
