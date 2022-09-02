@@ -5,17 +5,13 @@ import android.app.DatePickerDialog.OnDateSetListener
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.icu.util.Calendar
-import android.icu.util.TimeZone
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.google.android.material.timepicker.TimeFormat
+import androidx.appcompat.app.AppCompatActivity
 import dk.easj.anbo.datepickerexample.databinding.ActivityMainBinding
 import java.text.DateFormat
 import java.time.Clock
-import java.time.Instant
-import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
@@ -69,6 +65,7 @@ class MainActivity : AppCompatActivity() {
             val timeSetListener = OnTimeSetListener { timePicker, hourOfDay, minute ->
                 meetingStart[Calendar.HOUR_OF_DAY] = hourOfDay
                 meetingStart[Calendar.MINUTE] = minute
+                meetingStart[Calendar.SECOND] = 0 // seconds not relevant
                 val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT)
                 val timeString = timeFormatter.format(meetingStart.timeInMillis)
                 binding.timeButton.text = timeString
