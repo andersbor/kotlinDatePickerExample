@@ -14,6 +14,7 @@ import java.text.DateFormat
 import java.time.Clock
 import java.time.ZoneId
 import java.util.*
+import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("APPLE", "currentMoment unit time $currentMoment")
         Log.d("APPLE", "currentMoment unit time $t")
 
-        val dateFormatter = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE)
+        val dateFormatter = DateFormat.getDateInstance(DateFormat.LONG, Locale.ENGLISH)
         val timeFormatter = DateFormat.getTimeInstance() // using device locale
         val dateString = dateFormatter.format(currentMoment)
         val timeString = timeFormatter.format(currentMoment)
@@ -48,9 +49,9 @@ class MainActivity : AppCompatActivity() {
                 meetingStart.set(Calendar.YEAR, year)
                 meetingStart.set(Calendar.MONTH, month)
                 meetingStart.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                val dateFormatter = DateFormat.getDateInstance()
-                val dateString = dateFormatter.format(meetingStart.timeInMillis)
-                binding.dateButton.text = dateString
+                val dateFormatterLocal = DateFormat.getDateInstance()
+                val dateStringLocal = dateFormatterLocal.format(meetingStart.timeInMillis)
+                binding.dateButton.text = dateStringLocal
             }
             val dialog = DatePickerDialog(
                 this, dateSetListener, currentYear, currentMonth, currentDayOfMonth
@@ -66,9 +67,9 @@ class MainActivity : AppCompatActivity() {
                 meetingStart[Calendar.HOUR_OF_DAY] = hourOfDay
                 meetingStart[Calendar.MINUTE] = minute
                 meetingStart[Calendar.SECOND] = 0 // seconds not relevant
-                val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT)
-                val timeString = timeFormatter.format(meetingStart.timeInMillis)
-                binding.timeButton.text = timeString
+                val timeFormatterLocal = DateFormat.getTimeInstance(DateFormat.SHORT)
+                val timeStringLocal = timeFormatterLocal.format(meetingStart.timeInMillis)
+                binding.timeButton.text = timeStringLocal
             }
             val dialog = TimePickerDialog(
                 this, timeSetListener, currentHourOfDay, currentMinute, true
@@ -77,9 +78,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.showTimesButton.setOnClickListener {
-            val dateFormatter = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.LONG)
+            val dateFormatterLocal = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.LONG)
             val date = meetingStart.time
-            val dateTimeString = dateFormatter.format(date)
+            val dateTimeString = dateFormatterLocal.format(date)
             binding.timeTextView.text = dateTimeString
 
             binding.unixTimeMiliSecondsTextView.text =
@@ -92,6 +93,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun convertCalendarToTimeInSeconds(calendar: Calendar): Int {
         val timeInMillis: Long = calendar.timeInMillis
-        return (timeInMillis / 1000).toInt()
+        return (timeInMillis / 1000.0).roundToInt()
     }
 }
